@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const express = require("express");
 const { UserModel } = require("../models/UserModel");
 const bcrypt = require("bcrypt");
@@ -14,14 +15,49 @@ userRouter.post("/register", async (req, res) => {
   bcrypt.hash(password, 5, async function (err, hash) {
     if (err) return res.send({ message: "somthing went wrong", status: 0 });
     try {
-      let user = new UserModel({ name, email, password: hash });
-      await user.save();
-      res.send({
-        message: "User created",
-        status: 1,
-      });
-    } catch (error) {
-      res.send({
+      if(name,email,password){
+        let user = new UserModel({ name, email, password: hash });
+        await user.save();
+        res.send({
+          message: "User created",
+          status: 1,
+        });
+      }
+      if(name,email){
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+      auth: {
+        user: "bhushanarth456@gmail.com",
+        pass: "zxdcioqnieprsywm",
+      },
+    });
+    
+    
+    // Email data
+    const mailOptions = {
+    from: 'bhushanarth456@gmail.com',
+    to: email,
+    subject: 'Thank You for Your Submission',
+    text: `Hello ${name},\n Thank you for your submission!\n\nSincerely, Your Name`,
+  };
+  
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ' + error.message);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.send('Thank you! Check your email for a confirmation message.');
+    }
+  });
+  
+}
+  
+} catch (error) {
+  res.send({
         message: error.message,
         status: 0,
       });
@@ -70,3 +106,8 @@ userRouter.post("/login", async (req, res) => {
 });
 
 module.exports = { userRouter };
+
+
+
+
+
