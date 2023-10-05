@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const express = require("express");
 const { UserModel } = require("../models/UserModel");
 const bcrypt = require("bcrypt");
@@ -12,7 +12,7 @@ userRouter.get("/", (req, res) => {
 });
 
 
-userRouter.use(bodyParser.json());
+// userRouter.use(bodyParser.json());
 
 userRouter.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
