@@ -11,6 +11,7 @@ userRouter.get("/", (req, res) => {
   res.send("All the user");
 });
 
+
 userRouter.use(bodyParser.json());
 
 userRouter.post("/register", async (req, res) => {
