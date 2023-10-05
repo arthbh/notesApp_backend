@@ -38,7 +38,7 @@ userRouter.post("/login", async (req, res) => {
   try {
     let data = await UserModel.find({ email });
     if (data.length > 0) {
-      let token = jwt.sign({ userId: data[0]._id }, "saurabh",option);
+      let token = jwt.sign({ userId: data[0]._id }, "arth",option);
       bcrypt.compare(password, data[0].password, function (err, result) {
         if (err)
           return res.send({ message: "Somthing went wrong:" + err, status: 0 });
