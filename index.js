@@ -13,7 +13,7 @@ app.use("/note",noteRouter)
 
 app.get("/",(req,res)=>{
     res.send({
-        message:"api is working now"
+        message:"api is working"
     })
 })
 
