@@ -40,7 +40,7 @@ userRouter.post("/register", async (req, res) => {
     from: 'bhushanarth456@gmail.com',
     to: email,
     subject: 'Thank You for Your Submission',
-    text: `Hi ${name},\n\n Thank you for your submission !`,
+    text: `Hi ${name},\n\nThank you for your submission !`,
   };
   
   // Send email
