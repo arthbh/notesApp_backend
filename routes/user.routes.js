@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 const express = require("express");
 const { UserModel } = require("../models/UserModel");
 const bcrypt = require("bcrypt");
@@ -10,25 +11,15 @@ userRouter.get("/", (req, res) => {
   res.send("All the user");
 });
 
+userRouter.use(bodyParser.json());
+
 userRouter.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   bcrypt.hash(password, 5, async function (err, hash) {
     if (err) return res.send({ message: "somthing went wrong", status: 0 });
+    let user = new UserModel({ name, email, password: hash });
     try {
-
-      if(!name ||!email){
-        res.status(400);
-        throw new Error("All Fields are mandatory !")
-    }
-      else{
-        let user = new UserModel({ name, email, password: hash });
         await user.save();
-        res.send({
-          message: "User created",
-          status: 1,
-        });
-      }
-      {
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
@@ -52,14 +43,15 @@ userRouter.post("/register", async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error('Error sending email: ' + error.message);
-      res.status(500).send('Error sending email');
     } else {
       console.log('Email sent: ' + info.response);
-      res.send('Thank you! Check your email for a confirmation message.');
     }
   });
   
-}
+  res.status(201).send({
+    message: "User created",
+    status: 1,
+  });
   
 } catch (error) {
   res.send({
