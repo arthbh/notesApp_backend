@@ -18,8 +18,8 @@ userRouter.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   bcrypt.hash(password, 5, async function (err, hash) {
     if (err) return res.send({ message: "somthing went wrong", status: 0 });
-    let user = new UserModel({ name, email, password: hash });
     try {
+      let user = new UserModel({ name, email, password: hash });
         await user.save();
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
