@@ -15,7 +15,12 @@ userRouter.post("/register", async (req, res) => {
   bcrypt.hash(password, 5, async function (err, hash) {
     if (err) return res.send({ message: "somthing went wrong", status: 0 });
     try {
-      if(name,email,password){
+
+      if(!name ||!email){
+        res.status(400);
+        throw new Error("All Fields are mandatory !")
+    }
+      else{
         let user = new UserModel({ name, email, password: hash });
         await user.save();
         res.send({
@@ -23,7 +28,7 @@ userRouter.post("/register", async (req, res) => {
           status: 1,
         });
       }
-      if(name,email){
+      {
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
